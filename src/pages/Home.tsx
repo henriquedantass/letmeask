@@ -1,3 +1,4 @@
+import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 import ilustrationImg from "../assets/images/illustration.svg";
@@ -9,8 +10,12 @@ import { Button } from "../components/Button";
 
 export function Home() {
   const navigation = useNavigate();
+  const { signInWithGoogle, user } = useAuth();
 
-  function navigateToNewRoom() {
+  async function handleCreateRoom() {
+    if (!user) {
+      await signInWithGoogle();
+    }
     navigation("rooms/new");
   }
 
@@ -27,7 +32,7 @@ export function Home() {
       <main>
         <div className="main-content">
           <img src={logoImg} alt="Letmeask" />
-          <button className="create-room" onClick={navigateToNewRoom}>
+          <button className="create-room" onClick={handleCreateRoom}>
             <img src={logoGoogle} alt="Logo do Google" />
             Crie sua sala com o Google
           </button>
